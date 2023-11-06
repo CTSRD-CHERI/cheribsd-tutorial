@@ -13,7 +13,7 @@ no outstanding valid capabilities lasting from its previous allocation.
 This activity involves source code in the `temporal` subdirectory:
 
 ```
-% cd temporal
+cd ~/tutorial/src/temporal
 ```
 
 ## Checking whether temporal safety is globally enabled
@@ -22,7 +22,7 @@ Use the `sysctl(8)` command to inspect the value of the
 `security.cheri.runtime_revocation_default` system MIB entry:
 
 ```
-% sysctl security.cheri.runtime_revocation_default
+sysctl security.cheri.runtime_revocation_default
 ```
 
 This sysctl sets the default policy for revocation used by processes on
@@ -37,13 +37,13 @@ startup.
 Compile the program `use-after-free.c`:
 
 ```
-% cc -Wall -g -o use-after-free use-after-free.c
+cc -Wall -g -o use-after-free use-after-free.c
 ```
 
 Run the program to see what happens when a use-after-free bug is exercised:
 
 ```
-% ./use-after-free
+./use-after-free
 ```
 
 Why doesn't the program crash?

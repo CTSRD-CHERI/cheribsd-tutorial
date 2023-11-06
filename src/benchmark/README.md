@@ -42,6 +42,22 @@ file helloworld-cheriabi
 file helloworld-benchmark
 ```
 
+Inspect ELF binary headers with `readelf` (from the base system) or
+`llvm-readelf` (from LLVM for Morello):
+
+```
+readelf -n helloworld-cheriabi
+```
+```
+readelf -n helloworld-benchmark
+```
+```
+llvm-readelf -n helloworld-cheriabi
+```
+```
+llvm-readelf -n helloworld-benchmark
+```
+
 ## Running Benchmark ABI binaries
 
 Run both binaries from the command line:
@@ -57,25 +73,121 @@ Run both binaries from the command line:
 
 Using `pkg64cb`, which manages a complete set of third-party software packages
 compiled for the Benchmark ABI, list the currently installed Benchmark ABI
-package.
-Now install the Benchmark ABI compilation of `bash`.
+package:
+
+```
+pkg64cb info
+```
+
+Now install the Benchmark ABI compilation of `bash`:
+
+```
+sudo pkg64cb install bash
+```
+
+You can read more on useful package manager commands in the
+[Getting Started with CheriBSD guide](https://www.cheribsd.org/getting-started/23.11/packages/commands.html).
 
 ## Identifying Benchmark ABI processes
 
-In one terminal window, run the Benchmark ABI version of the `bash` shell:
+In one terminal window, run the Benchmark ABI version of the `bash` shell with
 
 ```
 /usr/local64cb/bin/bash
 ```
+and execute in the bash shell session
+```
+echo $$
+```
+to print the process's PID.
+Note that PID down.
 
-Run `echo $$` to print the process's PID, and note this down.
-Then run `procstat -a` to list the ABIs for all running processes.
-What is shown for your Benchmark ABI `bash` process, and how does this differ
-from other processes you see?
+In a second terminal window, run
+```
+procstat -a
+```
+to list the ABIs for all running processes.
+
+What is shown for your Benchmark ABI `bash` process with the PID you noted down,
+and how does this differ from other processes you see?
 
 ## Disassembling Benchmark ABI binaries
 
-Use GDB to disassemble the `main()` functions in both binaries.
+Use `objdump` to disassemble the `main()` functions in both binaries:
+
+```
+objdump -dj .text ./helloworld-cheriabi
+```
+```
+objdump -dj .text ./helloworld-benchmark
+```
+
+What differences exist between the two functions, and why?
+
+## Debugging Benchmark ABI binaries
+
+Use GDB to analyse CPU register contents just before and after returning from
+the `main()` functions in both binaries.
+
+First, run `gdb`:
+
+```
+gdb ./helloworld-cheriabi
+```
+
+Once you enter a GDB session,
+
+1. Disassemble the `main()` function:
+   ```
+   disassemble main
+   ```
+
+1. Record the offset of the `RET` instruction at the end of disassembly, e.g.
+   `56` in
+   ```
+   0x00000000001107ec <+56>:    ret     c30
+   ```
+
+1. Set a breakpoint for the `RET` instruction:
+   ```
+   break *main + N
+   ```
+   where `N` is the offset you recorded, e.g.
+   ```
+   break *main + 56
+   ```
+
+1. Run the program:
+   ```
+   run
+   ```
+
+1. Disassemble the current function to make sure the process was suspended at
+   the `RET` instruction:
+   ```
+   disassemble
+   ```
+
+1. Display the `C30` and `PCC` registers:
+   ```
+   info register c30 pcc
+   ```
+
+1. Execute the `RET` instruction:
+   ```
+   stepi
+   ```
+
+1. Display the `PCC` register again:
+   ```
+   info register pcc
+   ```
+
+Repeat the GDB session for the Benchmark ABI binary:
+```
+gdb ./helloworld-benchmark
+```
+
 What differences exist between the two functions, and why?
 
 ## Benchmarking with the Benchmark ABI

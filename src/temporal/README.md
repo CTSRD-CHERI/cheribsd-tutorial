@@ -15,6 +15,12 @@ that counts the number of completed atomic revocation sweeps.
 Memory added to quarantine in one epoch cannot be removed from quarantine
 until at least one complete epoch has passed -- i.e., the epoch counter has
 been increased by 2.
+More information on temporal memory safety support can be found in the
+[mrs(3) man page](https://man.cheribsd.org/cgi-bin/man.cgi/dev/mrs):
+
+```
+man mrs
+```
 
 This activity involves source code in the `temporal` subdirectory:
 
@@ -36,9 +42,28 @@ startup.
 We recommend setting this in `/boot/loader.conf`, which is processed by the
 boot loader before any user processes start.
 
-## Controlling revocation by binary and process
+## Controlling revocation by binary or process
 
-*XXXRW: This section to be written.*
+
+You can forcefully enable or disable revocations for a specific binary or
+process
+with
+[elfctl(1)](https://man.cheribsd.org/cgi-bin/man.cgi/dev/elfctl)
+or
+[proccontrol(1)](https://man.cheribsd.org/cgi-bin/man.cgi/dev/proccontrol)
+and ignore the default policy:
+
+```
+elfctl -e <+cherirevoke or +nocherirevoke> <binary>
+```
+
+```
+proccontrol -m cherirevoke -s <enable or disable> <program with arguments>
+```
+
+You can read more on these commands in the
+[mrs(3) man page](https://man.cheribsd.org/cgi-bin/man.cgi/dev/mrs).
+
 
 ## Exercising a use-after-free bug
 

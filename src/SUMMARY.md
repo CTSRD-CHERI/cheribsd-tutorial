@@ -6,4 +6,3 @@
 - [Benchmark ABI](benchmark/README.md)
 - [Heap temporal memory safety](temporal/README.md)
 - [Library compartmentalization](c18n/README.md)
-- [Visualization tooling](visualization/README.md)

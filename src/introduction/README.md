@@ -41,4 +41,3 @@ CheriBSD 23.11:
  * [The Benchmark ABI](../benchmark/)
  * [Heap temporal memory safety](../temporal/)
  * [Library compartmentalization](../c18n/)
- * [Visualization tooling](../visualization/)

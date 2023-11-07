@@ -102,7 +102,7 @@ relatively easy to imagine non-memory-safety vulnerabilities in I/O handling,
 which could lead to arbitrary code execution.
 
 To understand the implications of the vulnerability, we can use `objdump` to
-see what data will be visible to a compromisdd main program.
+see what data will be visible to a compromised main program.
 Run `objdump --full-contents` to hexdump the full program binary, whose
 `.text` and `.code` sections include those available to the program at run
 time:

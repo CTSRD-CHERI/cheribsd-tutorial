@@ -28,8 +28,8 @@ variadic argument lists.
 This modified ABI is now used by all CheriABI binaries in CheriBSD, and so
 off-the-shelf aarch64c binaries and libraries can be used with library
 compartmentalization without recompilation to the modified ABI.
-More information on library compartmentalization can be found in the c18n(3)
-man page:
+More information on library compartmentalization can be found in the
+[c18n(3) man page](https://man.cheribsd.org/cgi-bin/man.cgi/dev/c18n):
 
 ```
 man c18n

@@ -27,6 +27,8 @@ sysctl security.cheri.runtime_revocation_default
 
 This sysctl sets the default policy for revocation used by processes on
 startup.
+We recommend setting this in `/boot/loader.conf`, which is processed by the
+boot loader before any user processes start.
 
 ## Controlling revocation by binary and process
 

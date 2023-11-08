@@ -107,11 +107,16 @@ Run the program and enter the password `password123` to print the secret.
 
 Next, run the program and enter the password `password123456789`, which will
 crash due to a capability bounds violation.
+
+ * Why does the program crash?
 While CHERI memory safety is able to catch this specific vulnerability, it is
 relatively easy to imagine non-memory-safety vulnerabilities in I/O handling,
 which could lead to arbitrary code execution.
 
-To understand the implications of the vulnerability, we can use `objdump` to
+ * What is an example of an I/O data processing vulnerability that CHERI
+   memory safety would not mitigate?
+
+To understand the implications of such vulnerability, we can use `objdump` to
 see what data will be visible to a compromised main program.
 Run `objdump --full-contents` to hexdump the full program binary, whose
 `.text` and `.code` sections include those available to the program at run
@@ -151,5 +156,29 @@ chericat -f check.c18n.db -p PID
 chericat -f check.c18n.db -c libio.so
 ```
 
-What capabilities can the attacker reach, and how do they differ from those
-available to the attacker previously?
+* What capabilities can the attacker reach?
+* How do they differ from those available to the attacker in the
+  uncompartmentalized case?
+
+It is important to understand, however, that simply isolating running code is
+almost always insufficient to achieve robust sandboxing.
+The competent adversary will now consider further rights and attack surfaces
+to explore in search of further vulnerabilities.
+While this increased work factor of finding additional vulnerabilities is an
+important part of compartmentalization, internal software APIs are rarely well
+suited to be security boundaries without performing additional hardening.
+With this in mind:
+
+ * Inspecting the source code, ouput from `objdump`, and output from
+   `chericat`, assess the robustness of this compartmentalization: How might a
+   highly competent adversary try to escape the sandbox?
+ * What larger software architectural steps may be required to allow library
+   compartmentalization to be used more robustly for this kind of use case?
+
+Library compartmentalization has the potential to significantly improve
+software integrity and confidentiality properties in the presence of a strong
+adversary.
+However, it is also limited by the abstraction being around the current
+library operational model.
+
+ * What are the implications of library compartmentalization on availability?

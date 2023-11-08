@@ -11,7 +11,7 @@ domain-crossing shims implemented by the run-time linker.
 The adversary model for these compartments is one of trusted code but
 untrustworthy execution: a library such as `libpng` or `libjpeg` is trusted
 until it begins dynamic execution -- and has potentially been exposed to
-maligious data.
+malicious data.
 With library compartmentalization, an adversary who achieves arbitrary code
 execution within the library at run time will be able to reach only the
 resources (and further attack surfaces) declared statically through its
@@ -103,7 +103,7 @@ Compile the three C files as a CheriABI binary, `check.cheriabi`:
 cc -Wall -g -o check.cheriabi main.c io.c passwordcheck.c
 ```
 
-Run the program and enter the password `password123` to print the secret.
+Run the program and enter the password `Password123` to print the secret.
 
 Next, run the program and enter the password `password123456789`, which will
 crash due to a capability bounds violation.

@@ -116,7 +116,9 @@ seatd has never needed to perform a revocation pass, as it remains in epoch 0,
 whereas X.org has a non-zero epoch and has performed multiple passes.
 
 Modify `helloworld.c` to await user input before and after the call to
-`cheri_revoke()` using the POSIX `gets(3)` API; run `helloworld`.
+`cheri_revoke()` using the POSIX
+[gets_s(3)](https://man.cheribsd.org/cgi-bin/man.cgi/dev/gets_s)
+API; run `helloworld`.
 In a second login session, use the `ps(1)` command to obtain the process ID,
 and then use `procstat cheri` to inspects its protection state on either side
 of the revocation call.

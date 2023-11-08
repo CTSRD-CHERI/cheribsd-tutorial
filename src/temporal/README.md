@@ -4,11 +4,17 @@ CheriBSD 23.11 incorporates support for userlevel heap temporal memory
 safety based on a load-barrier extension to
 [Cornucopia](https://www.cl.cam.ac.uk/research/security/ctsrd/pdfs/2020oakland-cornucopia.pdf),
 which is inspired by garbage-collection techniques.
+
 This feature involves a collaboration between the kernel (which provides
 asynchronous capability revocation with VM acceleration) and the userlevel
 heap allocator (which quarantines freed memory until revocation of any
 pointers to it) to ensure that memory cannot be reallocated until there are
 no outstanding valid capabilities lasting from its previous allocation.
+The userlevel memory allocator and the kernel revoker share an `epoch counter`
+that counts the number of completed atomic revocation sweeps.
+Memory added to quarantine in one epoch cannot be removed from quarantine
+until at least one complete epoch has passed -- i.e., the epoch counter has
+been increased by 2.
 
 This activity involves source code in the `temporal` subdirectory:
 
@@ -63,7 +69,8 @@ before the use-after-free memory access:
 
 Recompile and re-run the program, this time under GDB, and observe its
 behavior.
-Which line faults, and why?
+
+ * Which line in the program faults, and why?
 
 ## Monitoring revocation in processes
 
@@ -82,3 +89,11 @@ Both processes in this example use a pure-capability process environment, have
 quarantining enabled, and are not currently revoking.
 seatd has never needed to perform a revocation pass, as it remains in epoch 0,
 whereas X.org has a non-zero epoch and has performed multiple passes.
+
+Modify `helloworld.c` to await user input before and after the call to
+`cheri_revoke()` using the POSIX `gets(3)` API; run `helloworld`.
+In a second login session, use the `ps(1)` command to obtain the process ID,
+and then use `procstat cheri` to inspects its protection state on either side
+of the revocation call.
+
+ * What is EPOCH before and after calling `cheri_revoke()` -- and why?

@@ -1,13 +1,14 @@
 # Library compartmentalization
 
 CheriBSD's library compartmentalization feature (c18n) executes each dynamic
-library in a compartmentalization-enabled process in its own protection
+library within a compartmentalization-enabled process in its own protection
 domain.
-The non-default c18n-enabled run-time linker grants libraries only
-capabilities to resources (global variables, APIs) declared in their ELF
-linkage.
+The non-default c18n-enabled run-time linker grants libraries capabilities
+only to resources (global variables, APIs) declared in their ELF linkage.
+Function calls that cross domain boundaries are interposed on by
+domain-crossing shims implemented by the run-time linker.
 
-The adversary model for these compartments is one of trusted code, but
+The adversary model for these compartments is one of trusted code but
 untrustworthy execution: a library such as `libpng` or `libjpeg` is trusted
 until it begins dynamic execution -- and has potentially been exposed to
 maligious data.
@@ -17,7 +18,8 @@ resources (and further attack surfaces) declared statically through its
 linkage.
 The programmer must then harden that linkage, and any involved APIs, to make
 them suitable for adversarial engagement -- but the foundation of isolation,
-controlled access, and controlled domain transition is in place by default.
+controlled access, and controlled domain transition is provided by the c18n
+implementation.
 
 In addition to a modified run-time linker, modest changes have been made to
 the aarch64c calling convention to avoid assumptions such as implicit stack
@@ -83,14 +85,16 @@ kdump
 ## Exercise
 
 A classic motivation for software compartmentalization is to separate less
-trustworthy I/O routines (which are more easily subject to compromise) from
-keying material.
+trustworthy I/O-processing routines (which are more easily subject to
+compromise) from keying material.
 We have constructed a simple application consisting of three C files:
 
- * `passwordcheck.c` contains the global variable 'password' and the function
-   `passwordcheck()`.
- * `io.c` contains the API `getpassword()`.
- * `main.c` calls `getpassword()` followed by `passwordcheck()`, and if it
+ * `passwordcheck.c` contains the global variable 'the_password' and the
+   function `passwordcheck()` that checks the offered password against the
+   defined password.
+ * `io.c` contains the API `readpassword()`, which uses the legacy C API
+   `fscanf()`.
+ * `main.c` calls `readpassword()` followed by `passwordcheck()`, and if it
    succeeds, will print the global variable `secret`.
 
 Compile the three C files as a CheriABI binary, `check.cheriabi`:
@@ -117,8 +121,11 @@ time:
 objdump --full-contents check.cheriabi
 ```
 
+This includes the hard-coded password in the password-checking routine.
+
 To mitigate these vulnerabilities, we will recompile the program and place the
-I/O routine in its own library:
+I/O routine in its own library -- and hence its own compartment when using the
+c18n run-time linker:
 
 ```
 cc -Wall -shared -g -o libio.so io.c
@@ -143,3 +150,6 @@ chericat -f check.c18n.db -p PID
 ```
 chericat -f check.c18n.db -c libio.so
 ```
+
+What capabilities can the attacker reach, and how do they differ from those
+available to the attacker previously?

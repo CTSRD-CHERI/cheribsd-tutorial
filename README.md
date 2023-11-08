@@ -2,7 +2,8 @@
 
 # CheriBSD 23.11 new features tutorial
 
-Robert N. M. Watson (University of Cambridge)
+Robert N. M. Watson (University of Cambridge) and
+Konrad Witaszczyk (University of Cambridge)
 
 ## Acknowledgements
 

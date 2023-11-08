@@ -108,8 +108,8 @@ procstat -a
 ```
 to list the ABIs for all running processes.
 
-What is shown for your Benchmark ABI `bash` process with the PID you noted down,
-and how does this differ from other processes you see?
+ * What is shown for your Benchmark ABI `bash` process with the PID you noted
+   down, and how does this differ from other processes you see?
 
 ## Disassembling Benchmark ABI binaries
 
@@ -122,7 +122,7 @@ objdump -dj .text ./helloworld-cheriabi
 objdump -dj .text ./helloworld-benchmark
 ```
 
-What differences exist between the two functions, and why?
+ * What differences exist between the two functions, and why?
 
 ## Debugging Benchmark ABI binaries
 
@@ -188,7 +188,7 @@ Repeat the GDB session for the Benchmark ABI binary:
 gdb ./helloworld-benchmark
 ```
 
-What differences exist between the two functions, and why?
+ * What differences exist between the two functions, and why?
 
 ## Benchmarking with the Benchmark ABI
 
@@ -222,7 +222,7 @@ time ./benchmark-sha256-cheriabi
 time ./benchmark-sha256-benchmarkabi
 ```
 
-How long does execution take for the CheriABI vs Benchmark ABI compilations of
-each program?
-Review the source code for the two workloads; why do they perform the way that
-they do?
+* How long does execution take for the CheriABI vs Benchmark ABI compilations
+  of each program?
+* Review the source code for the two workloads; why do they perform the way
+  that they do?

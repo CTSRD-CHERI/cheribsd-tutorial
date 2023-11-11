@@ -79,7 +79,7 @@ Run the program to see what happens when a use-after-free bug is exercised:
 ./use-after-free
 ```
 
-Why doesn't the program crash?
+ * Why doesn't the program crash?
 
 ## Synchronous revocation
 

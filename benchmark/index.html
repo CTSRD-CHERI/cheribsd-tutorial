@@ -1,0 +1,400 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Benchmark ABI - CheriBSD 23.11 new features tutorial</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../cover/index.html">CheriBSD 23.11 new features tutorial</a></li><li class="chapter-item expanded "><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../benchmark/index.html" class="active"><strong aria-hidden="true">2.</strong> Benchmark ABI</a></li><li class="chapter-item expanded "><a href="../temporal/index.html"><strong aria-hidden="true">3.</strong> Heap temporal memory safety</a></li><li class="chapter-item expanded "><a href="../c18n/index.html"><strong aria-hidden="true">4.</strong> Library compartmentalization</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">CheriBSD 23.11 new features tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/CTSRD-CHERI/cheribsd-23-11-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#benchmark-abi" id="benchmark-abi">Benchmark ABI</a></h1>
+<p>The Benchmark ABI makes minor changes to pure-capability code generation to
+address a limitation in Morello's branch prediction when PCC bounds may
+change.
+This limitation penalizes the performance of function calls and returns where
+PCC bounds are required shortly after the jump, leading to instruction stalls.
+Benchmark ABI code uses integer jumps rather than capability jumps, and
+Benchmark ABI processes use a PCC with bounds covering the full address space.
+Further details regarding Morello performance, and the Benchmark ABI, may be
+found in <a href="https://ctsrd-cheri.github.io/morello-early-performance-results/cover/">Early performance results from the prototype Morello
+microarchitecture</a>.</p>
+<p>This activity involves source code in the <code>benchmark</code> subdirectory:</p>
+<pre><code>cd ~/tutorial/src/benchmark
+</code></pre>
+<h2><a class="header" href="#compiling-code-for-the-benchmark-abi" id="compiling-code-for-the-benchmark-abi">Compiling code for the Benchmark ABI</a></h2>
+<p>Compile <code>helloworld.c</code> as a CheriABI binary:</p>
+<pre><code>cc -Wall -g -o helloworld-cheriabi helloworld.c
+</code></pre>
+<p>Compile <code>helloworld.c</code> as a Benchmark ABI binary:</p>
+<pre><code>cc -Wall -g -mabi=purecap-benchmark -o helloworld-benchmark helloworld.c
+</code></pre>
+<h2><a class="header" href="#identifying-benchmark-abi-binaries" id="identifying-benchmark-abi-binaries">Identifying Benchmark ABI binaries</a></h2>
+<p>Use the <code>file(1)</code> command to identify the two binaries:</p>
+<pre><code>file helloworld-cheriabi
+</code></pre>
+<pre><code>file helloworld-benchmark
+</code></pre>
+<p>Inspect ELF binary headers with <code>readelf</code> (from the base system) or
+<code>llvm-readelf</code> (from LLVM for Morello):</p>
+<pre><code>readelf -n helloworld-cheriabi
+</code></pre>
+<pre><code>readelf -n helloworld-benchmark
+</code></pre>
+<pre><code>llvm-readelf -n helloworld-cheriabi
+</code></pre>
+<pre><code>llvm-readelf -n helloworld-benchmark
+</code></pre>
+<h2><a class="header" href="#running-benchmark-abi-binaries" id="running-benchmark-abi-binaries">Running Benchmark ABI binaries</a></h2>
+<p>Run both binaries from the command line:</p>
+<pre><code>./helloworld-cheriabi
+</code></pre>
+<pre><code>./helloworld-benchmark
+</code></pre>
+<h2><a class="header" href="#the-benchmark-abi-package-manager" id="the-benchmark-abi-package-manager">The Benchmark ABI package manager</a></h2>
+<p>Using <code>pkg64cb</code>, which manages a complete set of third-party software packages
+compiled for the Benchmark ABI, list the currently installed Benchmark ABI
+package:</p>
+<pre><code>pkg64cb info
+</code></pre>
+<p>Now install the Benchmark ABI compilation of <code>bash</code>:</p>
+<pre><code>sudo pkg64cb install bash
+</code></pre>
+<p>You can read more on useful package manager commands in the
+<a href="https://www.cheribsd.org/getting-started/23.11/packages/commands.html">Getting Started with CheriBSD guide</a>.</p>
+<h2><a class="header" href="#identifying-benchmark-abi-processes" id="identifying-benchmark-abi-processes">Identifying Benchmark ABI processes</a></h2>
+<p>In one terminal window, run the Benchmark ABI version of the <code>bash</code> shell with</p>
+<pre><code>/usr/local64cb/bin/bash
+</code></pre>
+<p>and execute in the bash shell session</p>
+<pre><code>echo $$
+</code></pre>
+<p>to print the process's PID.
+Note that PID down.</p>
+<p>In a second terminal window, run</p>
+<pre><code>procstat -a
+</code></pre>
+<p>to list the ABIs for all running processes.</p>
+<ul>
+<li>What is shown for your Benchmark ABI <code>bash</code> process with the PID you noted
+down, and how does this differ from other processes you see?</li>
+</ul>
+<h2><a class="header" href="#disassembling-benchmark-abi-binaries" id="disassembling-benchmark-abi-binaries">Disassembling Benchmark ABI binaries</a></h2>
+<p>Use <code>objdump</code> to disassemble the <code>main()</code> functions in both binaries:</p>
+<pre><code>objdump -dj .text ./helloworld-cheriabi
+</code></pre>
+<pre><code>objdump -dj .text ./helloworld-benchmark
+</code></pre>
+<ul>
+<li>What differences exist between the two functions, and why?</li>
+</ul>
+<h2><a class="header" href="#debugging-benchmark-abi-binaries" id="debugging-benchmark-abi-binaries">Debugging Benchmark ABI binaries</a></h2>
+<p>Use GDB to analyse CPU register contents just before and after returning from
+the <code>main()</code> functions in both binaries.</p>
+<p>First, run <code>gdb</code>:</p>
+<pre><code>gdb ./helloworld-cheriabi
+</code></pre>
+<p>Once you enter a GDB session,</p>
+<ol>
+<li>
+<p>Disassemble the <code>main()</code> function:</p>
+<pre><code>disassemble main
+</code></pre>
+</li>
+<li>
+<p>Record the offset of the <code>RET</code> instruction at the end of disassembly, e.g.
+<code>56</code> in</p>
+<pre><code>0x00000000001107ec &lt;+56&gt;:    ret     c30
+</code></pre>
+</li>
+<li>
+<p>Set a breakpoint for the <code>RET</code> instruction:</p>
+<pre><code>break *main + N
+</code></pre>
+<p>where <code>N</code> is the offset you recorded, e.g.</p>
+<pre><code>break *main + 56
+</code></pre>
+</li>
+<li>
+<p>Run the program:</p>
+<pre><code>run
+</code></pre>
+</li>
+<li>
+<p>Disassemble the current function to make sure the process was suspended at
+the <code>RET</code> instruction:</p>
+<pre><code>disassemble
+</code></pre>
+</li>
+<li>
+<p>Display the <code>C30</code> and <code>PCC</code> registers:</p>
+<pre><code>info register c30 pcc
+</code></pre>
+</li>
+<li>
+<p>Execute the <code>RET</code> instruction:</p>
+<pre><code>stepi
+</code></pre>
+</li>
+<li>
+<p>Display the <code>PCC</code> register again:</p>
+<pre><code>info register pcc
+</code></pre>
+</li>
+</ol>
+<p>Repeat the GDB session for the Benchmark ABI binary:</p>
+<pre><code>gdb ./helloworld-benchmark
+</code></pre>
+<ul>
+<li>What differences exist between the two functions, and why?</li>
+</ul>
+<h2><a class="header" href="#benchmarking-with-the-benchmark-abi" id="benchmarking-with-the-benchmark-abi">Benchmarking with the Benchmark ABI</a></h2>
+<p>Compile the source code for two short C programs, <code>benchmark-atoi.c</code> and
+<code>benchmark-sha256.c</code>:</p>
+<pre><code>cc -Wall -g -o benchmark-atoi-cheriabi benchmark-atoi.c -lmd
+</code></pre>
+<pre><code>cc -Wall -g -mabi=purecap-benchmark -o benchmark-atoi-benchmarkabi benchmark-atoi.c -lmd
+</code></pre>
+<pre><code>cc -Wall -g -o benchmark-sha256-cheriabi benchmark-sha256.c -lmd
+</code></pre>
+<pre><code>cc -Wall -g -mabi=purecap-benchmark -o benchmark-sha256-benchmarkabi benchmark-sha256.c -lmd
+</code></pre>
+<p>Using the UNIX <code>time(1)</code> command, run each of the resulting binaries:</p>
+<pre><code>time ./benchmark-atoi-cheriabi
+</code></pre>
+<pre><code>time ./benchmark-atoi-benchmarkabi
+</code></pre>
+<pre><code>time ./benchmark-sha256-cheriabi
+</code></pre>
+<pre><code>time ./benchmark-sha256-benchmarkabi
+</code></pre>
+<ul>
+<li>How long does execution take for the CheriABI vs Benchmark ABI compilations
+of each program?</li>
+<li>Review the source code for the two workloads; why do they perform the way
+that they do?</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../introduction/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../temporal/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../introduction/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../temporal/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

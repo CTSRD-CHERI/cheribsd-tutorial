@@ -1,0 +1,324 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Heap temporal memory safety - CheriBSD 23.11 new features tutorial</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../cover/index.html">CheriBSD 23.11 new features tutorial</a></li><li class="chapter-item expanded "><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../benchmark/index.html"><strong aria-hidden="true">2.</strong> Benchmark ABI</a></li><li class="chapter-item expanded "><a href="../temporal/index.html" class="active"><strong aria-hidden="true">3.</strong> Heap temporal memory safety</a></li><li class="chapter-item expanded "><a href="../c18n/index.html"><strong aria-hidden="true">4.</strong> Library compartmentalization</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">CheriBSD 23.11 new features tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/CTSRD-CHERI/cheribsd-23-11-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#heap-temporal-memory-safety" id="heap-temporal-memory-safety">Heap temporal memory safety</a></h1>
+<p>CheriBSD 23.11 incorporates support for userlevel heap temporal memory
+safety based on a load-barrier extension to
+<a href="https://www.cl.cam.ac.uk/research/security/ctsrd/pdfs/2020oakland-cornucopia.pdf">Cornucopia</a>,
+which is inspired by garbage-collection techniques.</p>
+<p>This feature involves a collaboration between the kernel (which provides
+asynchronous capability revocation with VM acceleration) and the userlevel
+heap allocator (which quarantines freed memory until revocation of any
+pointers to it) to ensure that memory cannot be reallocated until there are
+no outstanding valid capabilities lasting from its previous allocation.
+The userlevel memory allocator and the kernel revoker share an <code>epoch counter</code>
+that counts the number of completed atomic revocation sweeps.
+Memory added to quarantine in one epoch cannot be removed from quarantine
+until at least one complete epoch has passed -- i.e., the epoch counter has
+been increased by 2.
+More information on temporal memory safety support can be found in the
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/mrs">mrs(3) man page</a>:</p>
+<pre><code>man mrs
+</code></pre>
+<p>This activity involves source code in the <code>temporal</code> subdirectory:</p>
+<pre><code>cd ~/tutorial/src/temporal
+</code></pre>
+<h2><a class="header" href="#checking-whether-temporal-safety-is-globally-enabled" id="checking-whether-temporal-safety-is-globally-enabled">Checking whether temporal safety is globally enabled</a></h2>
+<p>Use the <code>sysctl(8)</code> command to inspect the value of the
+<code>security.cheri.runtime_revocation_default</code> system MIB entry:</p>
+<pre><code>sysctl security.cheri.runtime_revocation_default
+</code></pre>
+<p>This sysctl sets the default policy for revocation used by processes on
+startup.
+We recommend setting this in <code>/boot/loader.conf</code>, which is processed by the
+boot loader before any user processes start.</p>
+<h2><a class="header" href="#controlling-revocation-by-binary-or-process" id="controlling-revocation-by-binary-or-process">Controlling revocation by binary or process</a></h2>
+<p>You can forcefully enable or disable revocations for a specific binary or
+process
+with
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/elfctl">elfctl(1)</a>
+or
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/proccontrol">proccontrol(1)</a>
+and ignore the default policy:</p>
+<pre><code>elfctl -e &lt;+cherirevoke or +nocherirevoke&gt; &lt;binary&gt;
+</code></pre>
+<pre><code>proccontrol -m cherirevoke -s &lt;enable or disable&gt; &lt;program with arguments&gt;
+</code></pre>
+<p>You can read more on these commands in the
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/mrs">mrs(3) man page</a>.</p>
+<h2><a class="header" href="#exercising-a-use-after-free-bug" id="exercising-a-use-after-free-bug">Exercising a use-after-free bug</a></h2>
+<p>Compile the program <code>use-after-free.c</code>:</p>
+<pre><code>cc -Wall -g -o use-after-free use-after-free.c
+</code></pre>
+<p>Run the program to see what happens when a use-after-free bug is exercised:</p>
+<pre><code>./use-after-free
+</code></pre>
+<ul>
+<li>Why doesn't the program crash?</li>
+</ul>
+<h2><a class="header" href="#synchronous-revocation" id="synchronous-revocation">Synchronous revocation</a></h2>
+<p>Revocation normally occurs asynchronously, with a memory quarantine preventing
+memory reuse until revocation of any pointers to that memory.
+Uncomment this line in <code>use-after-free.c</code> to trigger a synchronous revocation
+before the use-after-free memory access:</p>
+<pre><code>/* malloc_revoke(). */
+</code></pre>
+<p>Recompile and re-run the program, this time under GDB, and observe its
+behavior.</p>
+<ul>
+<li>Which line in the program faults, and why?</li>
+</ul>
+<h2><a class="header" href="#monitoring-revocation-in-processes" id="monitoring-revocation-in-processes">Monitoring revocation in processes</a></h2>
+<p>Use the <code>procstat cheri -v</code> command to inspect the CHERI memory-safety state
+of a target process.
+For example:</p>
+<pre><code># procstat cheri -v 923 1012
+  PID COMM                C QUAR  RSTATE                              EPOCH
+  923 seatd               P  yes    none                                  0
+ 1012 Xorg                P  yes    none                               0xd2
+</code></pre>
+<p>Both processes in this example use a pure-capability process environment, have
+quarantining enabled, and are not currently revoking.
+seatd has never needed to perform a revocation pass, as it remains in epoch 0,
+whereas X.org has a non-zero epoch and has performed multiple passes.</p>
+<p>Modify <code>use-after-free.c</code> to await user input before and after the call to
+<code>cheri_revoke()</code> using the POSIX
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/gets_s">gets_s(3)</a>
+API; run <code>use-after-free</code>.
+In a second login session, use the <code>ps(1)</code> command to obtain the process ID,
+and then use <code>procstat cheri</code> to inspects its protection state on either side
+of the revocation call.</p>
+<ul>
+<li>What is EPOCH before and after calling <code>cheri_revoke()</code> -- and why?</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../benchmark/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../c18n/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../benchmark/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../c18n/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

@@ -1,0 +1,369 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Library compartmentalization - CheriBSD 23.11 new features tutorial</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../cover/index.html">CheriBSD 23.11 new features tutorial</a></li><li class="chapter-item expanded "><a href="../introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../benchmark/index.html"><strong aria-hidden="true">2.</strong> Benchmark ABI</a></li><li class="chapter-item expanded "><a href="../temporal/index.html"><strong aria-hidden="true">3.</strong> Heap temporal memory safety</a></li><li class="chapter-item expanded "><a href="../c18n/index.html" class="active"><strong aria-hidden="true">4.</strong> Library compartmentalization</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">CheriBSD 23.11 new features tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/CTSRD-CHERI/cheribsd-23-11-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#library-compartmentalization" id="library-compartmentalization">Library compartmentalization</a></h1>
+<p>CheriBSD's library compartmentalization feature (c18n) executes each dynamic
+library within a compartmentalization-enabled process in its own protection
+domain.
+The non-default c18n-enabled run-time linker grants libraries capabilities
+only to resources (global variables, APIs) declared in their ELF linkage.
+Function calls that cross domain boundaries are interposed on by
+domain-crossing shims implemented by the run-time linker.</p>
+<p>The adversary model for these compartments is one of trusted code but
+untrustworthy execution: a library such as <code>libpng</code> or <code>libjpeg</code> is trusted
+until it begins dynamic execution -- and has potentially been exposed to
+malicious data.
+With library compartmentalization, an adversary who achieves arbitrary code
+execution within the library at run time will be able to reach only the
+resources (and further attack surfaces) declared statically through its
+linkage.
+The programmer must then harden that linkage, and any involved APIs, to make
+them suitable for adversarial engagement -- but the foundation of isolation,
+controlled access, and controlled domain transition is provided by the c18n
+implementation.</p>
+<p>In addition to a modified run-time linker, modest changes have been made to
+the aarch64c calling convention to avoid assumptions such as implicit stack
+sharing between callers and callees across library boundaries when passing
+variadic argument lists.
+This modified ABI is now used by all CheriABI binaries in CheriBSD, and so
+off-the-shelf aarch64c binaries and libraries can be used with library
+compartmentalization without recompilation to the modified ABI.
+More information on library compartmentalization can be found in the
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/c18n">c18n(3) man page</a>:</p>
+<pre><code>man c18n
+</code></pre>
+<p>This activity involves source code in the <code>temporal</code> subdirectory:</p>
+<pre><code>cd ~/tutorial/src/c18n
+</code></pre>
+<h2><a class="header" href="#compiling-applications-for-library-compartmentalization" id="compiling-applications-for-library-compartmentalization">Compiling applications for library compartmentalization</a></h2>
+<p>To compile a main application to use library compartmentalization, add the
+following flags to compilation of the program binary:</p>
+<pre><code>-Wl,--dynamic-linker=/libexec/ld-elf-c18n.so.1
+</code></pre>
+<p>For example, compile our <code>helloworld.c</code> example using:</p>
+<pre><code>cc -Wall -g -o helloworld helloworld.c -Wl,--dynamic-linker=/libexec/ld-elf-c18n.so.1
+</code></pre>
+<p>You can confirm whether a binary uses the c18n run-time linker by inspecting
+its <code>INTERP</code> field using the <code>readelf -l</code> command:</p>
+<pre><code>readelf -l helloworld
+</code></pre>
+<h2><a class="header" href="#tracing-compartment-boundary-crossings" id="tracing-compartment-boundary-crossings">Tracing compartment-boundary crossings</a></h2>
+<p>The BSD ktrace(1) command is able to trace compartment-boundary crossings.
+To enable this feature, set the <code>LD_C18N_UTRACE_COMPARTMENT</code> environmental
+variable, which will cause the c18n run-time linker to emit records using
+the utrace(2) system call.
+Run the program under ktrace with the <code>-tu</code> argument to capture only those
+records (and not a full system-call trace):</p>
+<pre><code>env LD_C18N_UTRACE_COMPARTMENT=1 ktrace -tu ./helloworld
+</code></pre>
+<p>The resulting <code>ktrace.out</code> file can be viewed using the kdump(1) command:</p>
+<pre><code>kdump
+</code></pre>
+<h2><a class="header" href="#exercise" id="exercise">Exercise</a></h2>
+<p>A classic motivation for software compartmentalization is to separate less
+trustworthy I/O-processing routines (which are more easily subject to
+compromise) from keying material.
+We have constructed a simple application consisting of three C files:</p>
+<ul>
+<li><code>passwordcheck.c</code> contains the global variable 'the_password' and the
+function <code>passwordcheck()</code> that checks the offered password against the
+defined password.</li>
+<li><code>io.c</code> contains the API <code>readpassword()</code>, which uses the legacy C API
+<code>fscanf()</code>.</li>
+<li><code>main.c</code> calls <code>readpassword()</code> followed by <code>passwordcheck()</code>, and if it
+succeeds, will print the global variable <code>secret</code>.</li>
+</ul>
+<p>Compile the three C files as a CheriABI binary, <code>check.cheriabi</code>:</p>
+<pre><code>cc -Wall -g -o check.cheriabi main.c io.c passwordcheck.c
+</code></pre>
+<p>Run the program and enter the password <code>Password123</code> to print the secret.</p>
+<p>Next, run the program and enter the password <code>password123456789</code>, which will
+crash due to a capability bounds violation.</p>
+<ul>
+<li>
+<p>Why does the program crash?
+While CHERI memory safety is able to catch this specific vulnerability, it is
+relatively easy to imagine non-memory-safety vulnerabilities in I/O handling,
+which could lead to arbitrary code execution.</p>
+</li>
+<li>
+<p>What is an example of an I/O data processing vulnerability that CHERI
+memory safety would not mitigate?</p>
+</li>
+</ul>
+<p>To understand the implications of such vulnerability, we can use <code>objdump</code> to
+see what data will be visible to a compromised main program.
+Run <code>objdump --full-contents</code> to hexdump the full program binary, whose
+<code>.text</code> and <code>.code</code> sections include those available to the program at run
+time:</p>
+<pre><code>objdump --full-contents check.cheriabi
+</code></pre>
+<p>This includes the hard-coded password in the password-checking routine.</p>
+<p>To mitigate these vulnerabilities, we will recompile the program and place the
+I/O routine in its own library -- and hence its own compartment when using the
+c18n run-time linker:</p>
+<pre><code>cc -Wall -shared -g -o libio.so io.c
+</code></pre>
+<pre><code>cc -Wall -g -o check.c18n main.c passwordcheck.c -Wl,--dynamic-linker=/libexec/ld-elf-c18n.so.1 -L. -lio
+</code></pre>
+<p>Now run the program:</p>
+<pre><code>env LD_C18N_LIBRARY_PATH=. ./check.c18n
+</code></pre>
+<p>The program will print its PID, which you can then use as an argument to
+<code>chericat</code> to dump its capability state (replace <code>PID</code> with the printed
+value):</p>
+<pre><code>chericat -f check.c18n.db -p PID
+</code></pre>
+<pre><code>chericat -f check.c18n.db -c libio.so
+</code></pre>
+<ul>
+<li>What capabilities can the attacker reach?</li>
+<li>How do they differ from those available to the attacker in the
+uncompartmentalized case?</li>
+</ul>
+<p>It is important to understand, however, that simply isolating running code is
+almost always insufficient to achieve robust sandboxing.
+The competent adversary will now consider further rights and attack surfaces
+to explore in search of further vulnerabilities.
+While this increased work factor of finding additional vulnerabilities is an
+important part of compartmentalization, internal software APIs are rarely well
+suited to be security boundaries without performing additional hardening.
+With this in mind:</p>
+<ul>
+<li>Inspecting the source code, ouput from <code>objdump</code>, and output from
+<code>chericat</code>, assess the robustness of this compartmentalization: How might a
+highly competent adversary try to escape the sandbox?</li>
+<li>What larger software architectural steps may be required to allow library
+compartmentalization to be used more robustly for this kind of use case?</li>
+</ul>
+<p>Library compartmentalization has the potential to significantly improve
+software integrity and confidentiality properties in the presence of a strong
+adversary.
+However, it is also limited by the abstraction being around the current
+library operational model.</p>
+<ul>
+<li>What are the implications of library compartmentalization on availability?</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../temporal/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../temporal/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>

@@ -1,0 +1,679 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>CheriBSD 23.11 new features tutorial</title>
+        
+        <meta name="robots" content="noindex" />
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="favicon.png">
+        
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="cover/index.html">CheriBSD 23.11 new features tutorial</a></li><li class="chapter-item expanded "><a href="introduction/index.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="benchmark/index.html"><strong aria-hidden="true">2.</strong> Benchmark ABI</a></li><li class="chapter-item expanded "><a href="temporal/index.html"><strong aria-hidden="true">3.</strong> Heap temporal memory safety</a></li><li class="chapter-item expanded "><a href="c18n/index.html"><strong aria-hidden="true">4.</strong> Library compartmentalization</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">CheriBSD 23.11 new features tutorial</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        <a href="https://github.com/CTSRD-CHERI/cheribsd-23-11-tutorial" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1><a class="header" href="#cheribsd-2311-new-features-tutorial" id="cheribsd-2311-new-features-tutorial">CheriBSD 23.11 new features tutorial</a></h1>
+<p>Robert N. M. Watson (University of Cambridge),
+Konrad Witaszczyk (University of Cambridge), and
+Jessica Man (University of Cambridge)</p>
+<h2><a class="header" href="#acknowledgements" id="acknowledgements">Acknowledgements</a></h2>
+<p>This work was supported by the Innovate UK project Digital Security by Design
+(DSbD) Technology Platform Prototype, 105694.
+This software was developed by SRI International, the University of
+Cambridge Computer Laboratory (Department of Computer Science and
+Technology), and Capabilities Limited under Defense Advanced Research
+Projects Agency (DARPA) Contract No. HR001122S0003 (&quot;MTSS&quot;).</p>
+<h1><a class="header" href="#introduction" id="introduction">Introduction</a></h1>
+<p>During the workshop, you should be given an ssh(1) command and a password that
+you can use to log in to your dedicated work environment.
+If you do not have access to the work environment, please talk to us during the
+workshop.</p>
+<p>The environment is one of
+<a href="https://docs.freebsd.org/en/books/handbook/jails/">FreeBSD jails</a>
+on a Morello box running a recent
+<a href="https://download.cheribsd.org/snapshots/dev/arm64/aarch64c/2023-11-01/">CheriBSD dev branch snapshot</a>
+that includes features that will be available in CheriBSD 23.11.
+The running kernel is the default kernel shipped with CheriBSD releases -
+the hybrid <code>GENERIC-MORELLO</code> kernel with <code>INVARIANTS</code> and <code>WITNESS</code> features
+enabled.</p>
+<p>There are several pre-installed packages in your jail to save you time with
+preparing your environment:</p>
+<ul>
+<li>
+<p>CheriABI <code>git</code>, <code>nano</code>, <code>tmux</code> and <code>chericat</code></p>
+</li>
+<li>
+<p>Hybrid ABI <code>llvm-base</code>, <code>gdb-cheri</code> and <code>vim</code></p>
+</li>
+</ul>
+<p>Once you are logged in, you can switch to the <code>root</code> user with <code>sudo su -l</code> and
+install any package you want with <code>pkg64c</code>, <code>pkg64</code> or <code>pkg64cb</code> package
+managers, as explained in the
+<a href="https://www.cheribsd.org/getting-started/23.11/packages/">Third-party packages</a>
+section of the Getting Started with CheriBSD guide.
+You can also install your SSH key in <code>~/.ssh/authorized_keys</code> not to be required
+to type in a user password to connect.</p>
+<p>The source code of this document with example exercises are stored in the
+<code>~/tutorial</code> directory of your jail.</p>
+<p>You can use your jail after the workshop to experiment with CheriBSD in your
+free time. We will remove your access after one week, on November 15.</p>
+<p>Log in to your jail now and follow next chapters describing new features in
+CheriBSD 23.11:</p>
+<ul>
+<li><a href="introduction/../benchmark/">The Benchmark ABI</a></li>
+<li><a href="introduction/../temporal/">Heap temporal memory safety</a></li>
+<li><a href="introduction/../c18n/">Library compartmentalization</a></li>
+</ul>
+<h1><a class="header" href="#benchmark-abi" id="benchmark-abi">Benchmark ABI</a></h1>
+<p>The Benchmark ABI makes minor changes to pure-capability code generation to
+address a limitation in Morello's branch prediction when PCC bounds may
+change.
+This limitation penalizes the performance of function calls and returns where
+PCC bounds are required shortly after the jump, leading to instruction stalls.
+Benchmark ABI code uses integer jumps rather than capability jumps, and
+Benchmark ABI processes use a PCC with bounds covering the full address space.
+Further details regarding Morello performance, and the Benchmark ABI, may be
+found in <a href="https://ctsrd-cheri.github.io/morello-early-performance-results/cover/">Early performance results from the prototype Morello
+microarchitecture</a>.</p>
+<p>This activity involves source code in the <code>benchmark</code> subdirectory:</p>
+<pre><code>cd ~/tutorial/src/benchmark
+</code></pre>
+<h2><a class="header" href="#compiling-code-for-the-benchmark-abi" id="compiling-code-for-the-benchmark-abi">Compiling code for the Benchmark ABI</a></h2>
+<p>Compile <code>helloworld.c</code> as a CheriABI binary:</p>
+<pre><code>cc -Wall -g -o helloworld-cheriabi helloworld.c
+</code></pre>
+<p>Compile <code>helloworld.c</code> as a Benchmark ABI binary:</p>
+<pre><code>cc -Wall -g -mabi=purecap-benchmark -o helloworld-benchmark helloworld.c
+</code></pre>
+<h2><a class="header" href="#identifying-benchmark-abi-binaries" id="identifying-benchmark-abi-binaries">Identifying Benchmark ABI binaries</a></h2>
+<p>Use the <code>file(1)</code> command to identify the two binaries:</p>
+<pre><code>file helloworld-cheriabi
+</code></pre>
+<pre><code>file helloworld-benchmark
+</code></pre>
+<p>Inspect ELF binary headers with <code>readelf</code> (from the base system) or
+<code>llvm-readelf</code> (from LLVM for Morello):</p>
+<pre><code>readelf -n helloworld-cheriabi
+</code></pre>
+<pre><code>readelf -n helloworld-benchmark
+</code></pre>
+<pre><code>llvm-readelf -n helloworld-cheriabi
+</code></pre>
+<pre><code>llvm-readelf -n helloworld-benchmark
+</code></pre>
+<h2><a class="header" href="#running-benchmark-abi-binaries" id="running-benchmark-abi-binaries">Running Benchmark ABI binaries</a></h2>
+<p>Run both binaries from the command line:</p>
+<pre><code>./helloworld-cheriabi
+</code></pre>
+<pre><code>./helloworld-benchmark
+</code></pre>
+<h2><a class="header" href="#the-benchmark-abi-package-manager" id="the-benchmark-abi-package-manager">The Benchmark ABI package manager</a></h2>
+<p>Using <code>pkg64cb</code>, which manages a complete set of third-party software packages
+compiled for the Benchmark ABI, list the currently installed Benchmark ABI
+package:</p>
+<pre><code>pkg64cb info
+</code></pre>
+<p>Now install the Benchmark ABI compilation of <code>bash</code>:</p>
+<pre><code>sudo pkg64cb install bash
+</code></pre>
+<p>You can read more on useful package manager commands in the
+<a href="https://www.cheribsd.org/getting-started/23.11/packages/commands.html">Getting Started with CheriBSD guide</a>.</p>
+<h2><a class="header" href="#identifying-benchmark-abi-processes" id="identifying-benchmark-abi-processes">Identifying Benchmark ABI processes</a></h2>
+<p>In one terminal window, run the Benchmark ABI version of the <code>bash</code> shell with</p>
+<pre><code>/usr/local64cb/bin/bash
+</code></pre>
+<p>and execute in the bash shell session</p>
+<pre><code>echo $$
+</code></pre>
+<p>to print the process's PID.
+Note that PID down.</p>
+<p>In a second terminal window, run</p>
+<pre><code>procstat -a
+</code></pre>
+<p>to list the ABIs for all running processes.</p>
+<ul>
+<li>What is shown for your Benchmark ABI <code>bash</code> process with the PID you noted
+down, and how does this differ from other processes you see?</li>
+</ul>
+<h2><a class="header" href="#disassembling-benchmark-abi-binaries" id="disassembling-benchmark-abi-binaries">Disassembling Benchmark ABI binaries</a></h2>
+<p>Use <code>objdump</code> to disassemble the <code>main()</code> functions in both binaries:</p>
+<pre><code>objdump -dj .text ./helloworld-cheriabi
+</code></pre>
+<pre><code>objdump -dj .text ./helloworld-benchmark
+</code></pre>
+<ul>
+<li>What differences exist between the two functions, and why?</li>
+</ul>
+<h2><a class="header" href="#debugging-benchmark-abi-binaries" id="debugging-benchmark-abi-binaries">Debugging Benchmark ABI binaries</a></h2>
+<p>Use GDB to analyse CPU register contents just before and after returning from
+the <code>main()</code> functions in both binaries.</p>
+<p>First, run <code>gdb</code>:</p>
+<pre><code>gdb ./helloworld-cheriabi
+</code></pre>
+<p>Once you enter a GDB session,</p>
+<ol>
+<li>
+<p>Disassemble the <code>main()</code> function:</p>
+<pre><code>disassemble main
+</code></pre>
+</li>
+<li>
+<p>Record the offset of the <code>RET</code> instruction at the end of disassembly, e.g.
+<code>56</code> in</p>
+<pre><code>0x00000000001107ec &lt;+56&gt;:    ret     c30
+</code></pre>
+</li>
+<li>
+<p>Set a breakpoint for the <code>RET</code> instruction:</p>
+<pre><code>break *main + N
+</code></pre>
+<p>where <code>N</code> is the offset you recorded, e.g.</p>
+<pre><code>break *main + 56
+</code></pre>
+</li>
+<li>
+<p>Run the program:</p>
+<pre><code>run
+</code></pre>
+</li>
+<li>
+<p>Disassemble the current function to make sure the process was suspended at
+the <code>RET</code> instruction:</p>
+<pre><code>disassemble
+</code></pre>
+</li>
+<li>
+<p>Display the <code>C30</code> and <code>PCC</code> registers:</p>
+<pre><code>info register c30 pcc
+</code></pre>
+</li>
+<li>
+<p>Execute the <code>RET</code> instruction:</p>
+<pre><code>stepi
+</code></pre>
+</li>
+<li>
+<p>Display the <code>PCC</code> register again:</p>
+<pre><code>info register pcc
+</code></pre>
+</li>
+</ol>
+<p>Repeat the GDB session for the Benchmark ABI binary:</p>
+<pre><code>gdb ./helloworld-benchmark
+</code></pre>
+<ul>
+<li>What differences exist between the two functions, and why?</li>
+</ul>
+<h2><a class="header" href="#benchmarking-with-the-benchmark-abi" id="benchmarking-with-the-benchmark-abi">Benchmarking with the Benchmark ABI</a></h2>
+<p>Compile the source code for two short C programs, <code>benchmark-atoi.c</code> and
+<code>benchmark-sha256.c</code>:</p>
+<pre><code>cc -Wall -g -o benchmark-atoi-cheriabi benchmark-atoi.c -lmd
+</code></pre>
+<pre><code>cc -Wall -g -mabi=purecap-benchmark -o benchmark-atoi-benchmarkabi benchmark-atoi.c -lmd
+</code></pre>
+<pre><code>cc -Wall -g -o benchmark-sha256-cheriabi benchmark-sha256.c -lmd
+</code></pre>
+<pre><code>cc -Wall -g -mabi=purecap-benchmark -o benchmark-sha256-benchmarkabi benchmark-sha256.c -lmd
+</code></pre>
+<p>Using the UNIX <code>time(1)</code> command, run each of the resulting binaries:</p>
+<pre><code>time ./benchmark-atoi-cheriabi
+</code></pre>
+<pre><code>time ./benchmark-atoi-benchmarkabi
+</code></pre>
+<pre><code>time ./benchmark-sha256-cheriabi
+</code></pre>
+<pre><code>time ./benchmark-sha256-benchmarkabi
+</code></pre>
+<ul>
+<li>How long does execution take for the CheriABI vs Benchmark ABI compilations
+of each program?</li>
+<li>Review the source code for the two workloads; why do they perform the way
+that they do?</li>
+</ul>
+<h1><a class="header" href="#heap-temporal-memory-safety" id="heap-temporal-memory-safety">Heap temporal memory safety</a></h1>
+<p>CheriBSD 23.11 incorporates support for userlevel heap temporal memory
+safety based on a load-barrier extension to
+<a href="https://www.cl.cam.ac.uk/research/security/ctsrd/pdfs/2020oakland-cornucopia.pdf">Cornucopia</a>,
+which is inspired by garbage-collection techniques.</p>
+<p>This feature involves a collaboration between the kernel (which provides
+asynchronous capability revocation with VM acceleration) and the userlevel
+heap allocator (which quarantines freed memory until revocation of any
+pointers to it) to ensure that memory cannot be reallocated until there are
+no outstanding valid capabilities lasting from its previous allocation.
+The userlevel memory allocator and the kernel revoker share an <code>epoch counter</code>
+that counts the number of completed atomic revocation sweeps.
+Memory added to quarantine in one epoch cannot be removed from quarantine
+until at least one complete epoch has passed -- i.e., the epoch counter has
+been increased by 2.
+More information on temporal memory safety support can be found in the
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/mrs">mrs(3) man page</a>:</p>
+<pre><code>man mrs
+</code></pre>
+<p>This activity involves source code in the <code>temporal</code> subdirectory:</p>
+<pre><code>cd ~/tutorial/src/temporal
+</code></pre>
+<h2><a class="header" href="#checking-whether-temporal-safety-is-globally-enabled" id="checking-whether-temporal-safety-is-globally-enabled">Checking whether temporal safety is globally enabled</a></h2>
+<p>Use the <code>sysctl(8)</code> command to inspect the value of the
+<code>security.cheri.runtime_revocation_default</code> system MIB entry:</p>
+<pre><code>sysctl security.cheri.runtime_revocation_default
+</code></pre>
+<p>This sysctl sets the default policy for revocation used by processes on
+startup.
+We recommend setting this in <code>/boot/loader.conf</code>, which is processed by the
+boot loader before any user processes start.</p>
+<h2><a class="header" href="#controlling-revocation-by-binary-or-process" id="controlling-revocation-by-binary-or-process">Controlling revocation by binary or process</a></h2>
+<p>You can forcefully enable or disable revocations for a specific binary or
+process
+with
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/elfctl">elfctl(1)</a>
+or
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/proccontrol">proccontrol(1)</a>
+and ignore the default policy:</p>
+<pre><code>elfctl -e &lt;+cherirevoke or +nocherirevoke&gt; &lt;binary&gt;
+</code></pre>
+<pre><code>proccontrol -m cherirevoke -s &lt;enable or disable&gt; &lt;program with arguments&gt;
+</code></pre>
+<p>You can read more on these commands in the
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/mrs">mrs(3) man page</a>.</p>
+<h2><a class="header" href="#exercising-a-use-after-free-bug" id="exercising-a-use-after-free-bug">Exercising a use-after-free bug</a></h2>
+<p>Compile the program <code>use-after-free.c</code>:</p>
+<pre><code>cc -Wall -g -o use-after-free use-after-free.c
+</code></pre>
+<p>Run the program to see what happens when a use-after-free bug is exercised:</p>
+<pre><code>./use-after-free
+</code></pre>
+<ul>
+<li>Why doesn't the program crash?</li>
+</ul>
+<h2><a class="header" href="#synchronous-revocation" id="synchronous-revocation">Synchronous revocation</a></h2>
+<p>Revocation normally occurs asynchronously, with a memory quarantine preventing
+memory reuse until revocation of any pointers to that memory.
+Uncomment this line in <code>use-after-free.c</code> to trigger a synchronous revocation
+before the use-after-free memory access:</p>
+<pre><code>/* malloc_revoke(). */
+</code></pre>
+<p>Recompile and re-run the program, this time under GDB, and observe its
+behavior.</p>
+<ul>
+<li>Which line in the program faults, and why?</li>
+</ul>
+<h2><a class="header" href="#monitoring-revocation-in-processes" id="monitoring-revocation-in-processes">Monitoring revocation in processes</a></h2>
+<p>Use the <code>procstat cheri -v</code> command to inspect the CHERI memory-safety state
+of a target process.
+For example:</p>
+<pre><code># procstat cheri -v 923 1012
+  PID COMM                C QUAR  RSTATE                              EPOCH
+  923 seatd               P  yes    none                                  0
+ 1012 Xorg                P  yes    none                               0xd2
+</code></pre>
+<p>Both processes in this example use a pure-capability process environment, have
+quarantining enabled, and are not currently revoking.
+seatd has never needed to perform a revocation pass, as it remains in epoch 0,
+whereas X.org has a non-zero epoch and has performed multiple passes.</p>
+<p>Modify <code>use-after-free.c</code> to await user input before and after the call to
+<code>cheri_revoke()</code> using the POSIX
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/gets_s">gets_s(3)</a>
+API; run <code>use-after-free</code>.
+In a second login session, use the <code>ps(1)</code> command to obtain the process ID,
+and then use <code>procstat cheri</code> to inspects its protection state on either side
+of the revocation call.</p>
+<ul>
+<li>What is EPOCH before and after calling <code>cheri_revoke()</code> -- and why?</li>
+</ul>
+<h1><a class="header" href="#library-compartmentalization" id="library-compartmentalization">Library compartmentalization</a></h1>
+<p>CheriBSD's library compartmentalization feature (c18n) executes each dynamic
+library within a compartmentalization-enabled process in its own protection
+domain.
+The non-default c18n-enabled run-time linker grants libraries capabilities
+only to resources (global variables, APIs) declared in their ELF linkage.
+Function calls that cross domain boundaries are interposed on by
+domain-crossing shims implemented by the run-time linker.</p>
+<p>The adversary model for these compartments is one of trusted code but
+untrustworthy execution: a library such as <code>libpng</code> or <code>libjpeg</code> is trusted
+until it begins dynamic execution -- and has potentially been exposed to
+malicious data.
+With library compartmentalization, an adversary who achieves arbitrary code
+execution within the library at run time will be able to reach only the
+resources (and further attack surfaces) declared statically through its
+linkage.
+The programmer must then harden that linkage, and any involved APIs, to make
+them suitable for adversarial engagement -- but the foundation of isolation,
+controlled access, and controlled domain transition is provided by the c18n
+implementation.</p>
+<p>In addition to a modified run-time linker, modest changes have been made to
+the aarch64c calling convention to avoid assumptions such as implicit stack
+sharing between callers and callees across library boundaries when passing
+variadic argument lists.
+This modified ABI is now used by all CheriABI binaries in CheriBSD, and so
+off-the-shelf aarch64c binaries and libraries can be used with library
+compartmentalization without recompilation to the modified ABI.
+More information on library compartmentalization can be found in the
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/dev/c18n">c18n(3) man page</a>:</p>
+<pre><code>man c18n
+</code></pre>
+<p>This activity involves source code in the <code>temporal</code> subdirectory:</p>
+<pre><code>cd ~/tutorial/src/c18n
+</code></pre>
+<h2><a class="header" href="#compiling-applications-for-library-compartmentalization" id="compiling-applications-for-library-compartmentalization">Compiling applications for library compartmentalization</a></h2>
+<p>To compile a main application to use library compartmentalization, add the
+following flags to compilation of the program binary:</p>
+<pre><code>-Wl,--dynamic-linker=/libexec/ld-elf-c18n.so.1
+</code></pre>
+<p>For example, compile our <code>helloworld.c</code> example using:</p>
+<pre><code>cc -Wall -g -o helloworld helloworld.c -Wl,--dynamic-linker=/libexec/ld-elf-c18n.so.1
+</code></pre>
+<p>You can confirm whether a binary uses the c18n run-time linker by inspecting
+its <code>INTERP</code> field using the <code>readelf -l</code> command:</p>
+<pre><code>readelf -l helloworld
+</code></pre>
+<h2><a class="header" href="#tracing-compartment-boundary-crossings" id="tracing-compartment-boundary-crossings">Tracing compartment-boundary crossings</a></h2>
+<p>The BSD ktrace(1) command is able to trace compartment-boundary crossings.
+To enable this feature, set the <code>LD_C18N_UTRACE_COMPARTMENT</code> environmental
+variable, which will cause the c18n run-time linker to emit records using
+the utrace(2) system call.
+Run the program under ktrace with the <code>-tu</code> argument to capture only those
+records (and not a full system-call trace):</p>
+<pre><code>env LD_C18N_UTRACE_COMPARTMENT=1 ktrace -tu ./helloworld
+</code></pre>
+<p>The resulting <code>ktrace.out</code> file can be viewed using the kdump(1) command:</p>
+<pre><code>kdump
+</code></pre>
+<h2><a class="header" href="#exercise" id="exercise">Exercise</a></h2>
+<p>A classic motivation for software compartmentalization is to separate less
+trustworthy I/O-processing routines (which are more easily subject to
+compromise) from keying material.
+We have constructed a simple application consisting of three C files:</p>
+<ul>
+<li><code>passwordcheck.c</code> contains the global variable 'the_password' and the
+function <code>passwordcheck()</code> that checks the offered password against the
+defined password.</li>
+<li><code>io.c</code> contains the API <code>readpassword()</code>, which uses the legacy C API
+<code>fscanf()</code>.</li>
+<li><code>main.c</code> calls <code>readpassword()</code> followed by <code>passwordcheck()</code>, and if it
+succeeds, will print the global variable <code>secret</code>.</li>
+</ul>
+<p>Compile the three C files as a CheriABI binary, <code>check.cheriabi</code>:</p>
+<pre><code>cc -Wall -g -o check.cheriabi main.c io.c passwordcheck.c
+</code></pre>
+<p>Run the program and enter the password <code>Password123</code> to print the secret.</p>
+<p>Next, run the program and enter the password <code>password123456789</code>, which will
+crash due to a capability bounds violation.</p>
+<ul>
+<li>
+<p>Why does the program crash?
+While CHERI memory safety is able to catch this specific vulnerability, it is
+relatively easy to imagine non-memory-safety vulnerabilities in I/O handling,
+which could lead to arbitrary code execution.</p>
+</li>
+<li>
+<p>What is an example of an I/O data processing vulnerability that CHERI
+memory safety would not mitigate?</p>
+</li>
+</ul>
+<p>To understand the implications of such vulnerability, we can use <code>objdump</code> to
+see what data will be visible to a compromised main program.
+Run <code>objdump --full-contents</code> to hexdump the full program binary, whose
+<code>.text</code> and <code>.code</code> sections include those available to the program at run
+time:</p>
+<pre><code>objdump --full-contents check.cheriabi
+</code></pre>
+<p>This includes the hard-coded password in the password-checking routine.</p>
+<p>To mitigate these vulnerabilities, we will recompile the program and place the
+I/O routine in its own library -- and hence its own compartment when using the
+c18n run-time linker:</p>
+<pre><code>cc -Wall -shared -g -o libio.so io.c
+</code></pre>
+<pre><code>cc -Wall -g -o check.c18n main.c passwordcheck.c -Wl,--dynamic-linker=/libexec/ld-elf-c18n.so.1 -L. -lio
+</code></pre>
+<p>Now run the program:</p>
+<pre><code>env LD_C18N_LIBRARY_PATH=. ./check.c18n
+</code></pre>
+<p>The program will print its PID, which you can then use as an argument to
+<code>chericat</code> to dump its capability state (replace <code>PID</code> with the printed
+value):</p>
+<pre><code>chericat -f check.c18n.db -p PID
+</code></pre>
+<pre><code>chericat -f check.c18n.db -c libio.so
+</code></pre>
+<ul>
+<li>What capabilities can the attacker reach?</li>
+<li>How do they differ from those available to the attacker in the
+uncompartmentalized case?</li>
+</ul>
+<p>It is important to understand, however, that simply isolating running code is
+almost always insufficient to achieve robust sandboxing.
+The competent adversary will now consider further rights and attack surfaces
+to explore in search of further vulnerabilities.
+While this increased work factor of finding additional vulnerabilities is an
+important part of compartmentalization, internal software APIs are rarely well
+suited to be security boundaries without performing additional hardening.
+With this in mind:</p>
+<ul>
+<li>Inspecting the source code, ouput from <code>objdump</code>, and output from
+<code>chericat</code>, assess the robustness of this compartmentalization: How might a
+highly competent adversary try to escape the sandbox?</li>
+<li>What larger software architectural steps may be required to allow library
+compartmentalization to be used more robustly for this kind of use case?</li>
+</ul>
+<p>Library compartmentalization has the potential to significantly improve
+software integrity and confidentiality properties in the presence of a strong
+adversary.
+However, it is also limited by the abstraction being around the current
+library operational model.</p>
+<ul>
+<li>What are the implications of library compartmentalization on availability?</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+        
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+        
+        
+
+    </body>
+</html>

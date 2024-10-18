@@ -6,6 +6,11 @@ Robert N. M. Watson (University of Cambridge),
 Konrad Witaszczyk (University of Cambridge), and
 Jessica Man (University of Cambridge)
 
+<div class="warning">
+This tutorial covers the obsolete 23.11 release.  Some material may be
+out of date.
+</div>
+
 ## Acknowledgements
 
 This work was supported by the Innovate UK project Digital Security by Design

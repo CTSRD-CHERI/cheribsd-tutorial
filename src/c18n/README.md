@@ -1,5 +1,13 @@
 # Library compartmentalization
 
+<div class="warning">
+This material is obsolete.  Among other things,
+<code>/libexec/ld-elf-c18n.so.1</code> no longer exists.
+See the latest
+<a href="https://man.cheribsd.org/cgi-bin/man.cgi/c18n">c18n(3) man page</a>
+for up to date information.
+</div>
+
 CheriBSD's library compartmentalization feature (c18n) executes each dynamic
 library within a compartmentalization-enabled process in its own protection
 domain.
